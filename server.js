@@ -5,7 +5,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Initialize Express
 const app = express();
-const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors({
@@ -58,8 +57,14 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Visit http://localhost:${PORT} to check if server is running`);
-}); 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Visit http://localhost:${PORT} to check if server is running`);
+  });
+}
+
+// Export for Vercel
+module.exports = app; 
