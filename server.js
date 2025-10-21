@@ -7,8 +7,14 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 // Middleware
+const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:3000'];
+
+if (!allowedOrigins.includes('http://localhost:3000')) {
+  allowedOrigins.push('http://localhost:3000');
+}
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000'
+  origin: allowedOrigins
 }));
 app.use(express.json());
 
